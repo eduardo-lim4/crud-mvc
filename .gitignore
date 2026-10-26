@@ -1,0 +1,14 @@
+# Arquivos gerados
+bin/
+*.class
+sources*.txt
+
+# Banco SQLite gerado pelo programa
+*.db
+
+# Configuracao local com senha (copie do database.properties.example)
+database.properties
+
+# Arquivos de sistema
+Thumbs.db
+.DS_Store

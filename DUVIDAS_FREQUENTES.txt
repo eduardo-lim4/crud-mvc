@@ -1,0 +1,97 @@
+=====================================================================
+ DUVIDAS FREQUENTES (FAQ)
+=====================================================================
+
+
+PERGUNTA 1: Como executo o programa?
+RESPOSTA: De dois cliques em "executar.bat" (Windows). Ele compila e
+abre o programa. Alternativamente, pelo terminal, dentro da pasta do
+projeto:
+
+  javac -encoding UTF-8 -cp "lib\*" -d bin src\main\java\trabnp2\*.java src\main\java\trabnp2\model\*.java src\main\java\trabnp2\dao\*.java src\main\java\trabnp2\view\*.java src\main\java\trabnp2\controller\*.java src\main\java\trabnp2\util\*.java
+  java -cp "bin;lib\*;." trabnp2.Main
+
+
+PERGUNTA 2: Preciso instalar algum banco de dados?
+RESPOSTA: Sim. O projeto esta configurado para MySQL (MySQL Server
+rodando, o mesmo do Workbench). Voce so precisa preencher usuario e
+senha no "database.properties". Se precisar rodar em uma maquina sem
+MySQL, da para trocar para SQLite sem instalar nada (veja a ultima
+secao do CONFIGURACAO_BANCO.txt).
+
+
+PERGUNTA 3: Onde ficam salvos os dados cadastrados?
+RESPOSTA: No banco "bd_trabnp2" (tabela "tb_clientes") do seu servidor
+MySQL. Confira pelo Workbench: SELECT * FROM bd_trabnp2.tb_clientes;
+No modo alternativo SQLite, no arquivo "banco.db" da pasta projeto.
+
+
+PERGUNTA 4: Como troco de MySQL para SQLite (ou volta)?
+RESPOSTA: Abra o arquivo "database.properties" e mude "db.type=mysql"
+para "db.type=sqlite" (ou o contrario). O programa cria o banco e a
+tabela automaticamente nos dois modos.
+
+
+PERGUNTA 5: Aparece o erro "No suitable driver found". O que fazer?
+RESPOSTA: A pasta "lib" esta sem os drivers JDBC. Confira se existem
+os arquivos "sqlite-jdbc-3.46.1.3.jar" e "mysql-connector-j-9.1.0.jar"
+dentro da pasta "lib" (veja CONFIGURACAO_BANCO.txt para baixa-los).
+Se estiver executando por linha de comando, confira se o classpath
+inclui "lib\*" (os scripts .bat ja fazem isso).
+
+
+PERGUNTA 6: Aparece "Access denied for user 'root'@'localhost'".
+RESPOSTA: A senha (ou usuario) no "database.properties" esta errada
+para o seu MySQL. Corrija "mysql.user" e "mysql.password".
+
+
+PERGUNTA 7: Aparece "Communications link failure" ou
+"Connection refused".
+RESPOSTA: O servidor MySQL nao esta rodando ou a porta esta errada.
+Verifique se o servico MySQL esta iniciado (padrao: porta 3306) e se
+"mysql.host" e "mysql.port" estao corretos.
+
+
+PERGUNTA 8: "Unknown database 'bd_trabnp2'" pode acontecer?
+RESPOSTA: Nao deveria. O programa cria o banco automaticamente ao
+conectar (CREATE DATABASE IF NOT EXISTS). Se ocorrer, verifique se o
+usuario tem permissao de criacao de bancos no MySQL.
+
+
+PERGUNTA 9: Como edito um cadastro?
+RESPOSTA: Clique na linha do cliente na tabela - os dados vao para o
+formulario. Altere o que quiser e clique em "Salvar".
+
+
+PERGUNTA 10: Como excluo um cadastro?
+RESPOSTA: Clique na linha do cliente na tabela e depois em "Excluir".
+Uma confirmacao sera pedida antes de apagar.
+
+
+PERGUNTA 11: Quero apagar todos os dados e comecar do zero. Como?
+RESPOSTA: No modo SQLite, feche o programa e apague o arquivo
+"banco.db". Ele sera recriado vazio na proxima execucao. No modo
+MySQL, rode no MySQL: DELETE FROM tb_clientes; (ou DROP TABLE tb_clientes;).
+
+
+PERGUNTA 12: O que significa MVC?
+RESPOSTA: Model-View-Controller, a arquitetura usada no projeto:
+  - Model: as entidades e regras de dados (pacote model);
+  - View: a interface grafica com o usuario (pacote view);
+  - Controller: recebe as acoes da tela e coordena o fluxo
+    (pacote controller).
+Detalhes no DOCUMENTACAO.txt.
+
+
+PERGUNTA 13: Posso compilar na IDE (IntelliJ, Eclipse, NetBeans)?
+RESPOSTA: Sim. Crie um projeto Java e aponte o source para
+"src\main\java", adicione os .jar da pasta "lib" ao classpath da IDE
+e execute a classe "trabnp2.Main". Copie o "database.properties.example"
+para "database.properties", preencha a senha e coloque na raiz do
+projeto (ou inclua no classpath).
+
+
+PERGUNTA 14: Como testo so a conexao com o banco, sem abrir a tela?
+RESPOSTA: Execute "testar_conexao.bat". Ele faz as 4 operacoes do
+CRUD (criar, buscar, atualizar e excluir um registro de teste) e
+mostra o resultado no console.

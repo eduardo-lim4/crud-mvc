@@ -1,0 +1,117 @@
+=====================================================================
+ COMO CONFIGURAR A CONEXAO COM O BANCO DE DADOS (MySQL)
+=====================================================================
+
+O projeto esta configurado para usar o MYSQL. A configuracao fica
+no arquivo "database.properties" (na raiz do projeto):
+
+  db.type=mysql
+  mysql.host=localhost
+  mysql.port=3306
+  mysql.database=bd_trabnp2
+  mysql.user=root
+  mysql.password=
+
+Preencha a SUA senha do MySQL no campo "mysql.password".
+
+
+---------------------------------------------------------------------
+ PASSO A PASSO (MySQL + Workbench)
+---------------------------------------------------------------------
+
+Passo 1 - Tenha o MySQL Server instalado e rodando.
+  - No Windows, o servico costuma chamar-se "MySQL80" e escutar na
+    porta 3306 (confira no Workbench, em "Server Status", ou no
+    painel de Servicos do Windows).
+
+Passo 2 - Descubra/defina seu usuario e senha.
+  - Instalacao padrao: usuario "root" e a senha que voce escolheu
+    na instalacao do MySQL.
+  - Para criar outro usuario, se preferir, execute no Workbench:
+
+      CREATE USER 'trabnp2'@'localhost' IDENTIFIED BY 'suaSenha';
+      GRANT ALL PRIVILEGES ON bd_trabnp2.* TO 'trabnp2'@'localhost';
+      FLUSH PRIVILEGES;
+
+Passo 3 - Edite o "database.properties" com usuario e senha.
+
+Passo 4 - Teste: rode "testar_conexao.bat".
+  - Se aparecer "CRUD testado com sucesso no banco mysql!", pronto!
+  - Deu erro? Veja a secao de erros comuns abaixo e o arquivo
+    DUVIDAS_FREQUENTES.txt.
+
+Passo 5 - Rode "executar.bat" para abrir o programa.
+
+OBSERVACAO: voce NAO precisa criar nada no Workbench. Na primeira
+execucao o programa cria automaticamente o banco "bd_trabnp2" e a
+tabela "tb_clientes". Depois de usar o programa, voce pode conferir os
+dados no Workbench com:
+
+  SELECT * FROM bd_trabnp2.tb_clientes;
+
+
+---------------------------------------------------------------------
+ ERROS COMUNS DE CONEXAO
+---------------------------------------------------------------------
+
+"Access denied for user 'root'@'localhost'"
+  -> Senha/usuario errados no database.properties.
+
+"Communications link failure" / "Connection refused"
+  -> MySQL nao esta rodando ou a porta esta errada.
+
+"Public Key Retrieval is not allowed"
+  -> Ja tratado pela URL do programa (allowPublicKeyRetrieval).
+
+"Unknown database 'bd_trabnp2'"
+  -> Nao deveria ocorrer (o programa cria o banco). Verifique se o
+     usuario tem permissao de CREATE.
+
+
+---------------------------------------------------------------------
+ COMO A CONEXAO FUNCIONA NO CODIGO
+---------------------------------------------------------------------
+
+Toda a conexao fica centralizada na classe:
+
+  src\main\java\trabnp2\util\DatabaseConnection.java
+
+  - Le o arquivo database.properties;
+  - Monta a URL JDBC: jdbc:mysql://host:porta/banco?...
+  - getConnection() devolve um java.sql.Connection;
+  - initDatabase() cria o banco (se nao existir) e a tabela
+    "tb_clientes".
+
+As demais classes (DAO) so usam:
+
+  Connection con = DatabaseConnection.getConnection();
+
+Nenhuma outra parte do projeto conhece detalhes do banco.
+
+
+---------------------------------------------------------------------
+ ALTERNATIVA: SQLITE (sem instalar servidor)
+---------------------------------------------------------------------
+
+Se precisar rodar em uma maquina sem MySQL, basta trocar no
+"database.properties":
+
+  db.type=sqlite
+  sqlite.file=banco.db
+
+O banco passa a ser o arquivo "banco.db", criado automaticamente na
+pasta do projeto. Nenhuma outra alteracao no codigo eh necessaria.
+
+
+---------------------------------------------------------------------
+ DRIVERS JDBC (pasta lib/)
+---------------------------------------------------------------------
+
+  lib\mysql-connector-j-9.1.0.jar  -> driver MySQL (necessario)
+  lib\sqlite-jdbc-3.46.1.3.jar     -> driver SQLite (alternativa)
+
+Se precisar baixa-los novamente:
+  MySQL:  https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/
+  SQLite: https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/
+
+Os scripts .bat ja incluem a pasta "lib" no classpath.

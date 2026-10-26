@@ -1,0 +1,50 @@
+=====================================================================
+ DOCUMENTACAO - CRUD DE CLIENTES (Java Swing + JDBC + MVC)
+=====================================================================
+
+SISTEMA
+  Programa desktop de cadastro de clientes com operacoes CRUD
+  (Cadastro, Visualizacao, Edicao e Exclusao), interface Java Swing
+  e persistencia em banco de dados (SQLite ou MySQL via JDBC).
+
+TECNOLOGIAS
+  - Linguagem: Java (JDK 8 ou superior)
+  - Interface: Java Swing
+  - Banco: MySQL (configuracao principal) ou SQLite - ver CONFIGURACAO_BANCO.txt
+  - Drivers JDBC na pasta lib/
+
+ARQUITETURA MVC
+  Model    -> pacote "trabnp2.model"
+      Cliente.java: entidade (id, nome, email, telefone).
+
+  View     -> pacote "trabnp2.view"
+      ClienteView.java: janela Swing com formulario, tabela de
+      clientes e botoes (Novo, Salvar, Excluir, Limpar). Nao acessa
+      o banco diretamente.
+
+  Controller -> pacote "trabnp2.controller"
+      ClienteController.java: recebe os cliques da tela, valida os
+      dados, chama o DAO e devolve o resultado para a tela.
+
+  APOIO
+      trabnp2.dao.ClienteDAO: SQL do CRUD (INSERT, SELECT, UPDATE,
+      DELETE) usando PreparedStatement.
+      trabnp2.util.DatabaseConnection: conexao central com o banco,
+      le o arquivo database.properties e cria a tabela inicial.
+      trabnp2.util.TesteConexao: teste de CRUD sem interface.
+      trabnp2.Main: ponto de entrada do programa.
+
+FLUXO DE UM CLIQUE EM "SALVAR" (exemplo)
+  View (botao Salvar) -> Controller.salvar() -> valida campos ->
+  ClienteDAO.salvar()/atualizar() -> banco de dados -> Controller ->
+  View atualiza a tabela e mostra a mensagem de sucesso.
+
+COMO EXECUTAR
+  Windows: duplo clique em "executar.bat".
+  Linha de comando: veja DUVIDAS_FREQUENTES.txt (pergunta 1).
+
+ARQUIVOS DE APOIO
+  CONFIGURACAO_BANCO.txt  -> como conectar no SQLite ou MySQL
+  DUVIDAS_FREQUENTES.txt  -> perguntas comuns e erros conhecidos
+  database.properties.example -> modelo de configuracao (copie para database.properties)
+  database.properties     -> configuracao local (nao enviar ao GitHub)

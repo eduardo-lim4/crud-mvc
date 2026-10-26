@@ -1,0 +1,26 @@
+# ============================================================
+#  CONFIGURACAO DO BANCO DE DADOS (exemplo)
+#
+#  1. Copie este arquivo renomeando para "database.properties"
+#  2. Preencha sua senha do MySQL no campo mysql.password
+#
+#  O arquivo "database.properties" real NAO vai para o GitHub
+#  (esta no .gitignore) justamente para nao expor a senha.
+#
+#  db.type = mysql  -> requer servidor MySQL rodando
+#  db.type = sqlite -> alternativa sem instalar nada
+# ============================================================
+db.type=mysql
+
+# ----- MySQL -----
+# O banco "bd_trabnp2" e a tabela "tb_clientes" sao criados
+# automaticamente na primeira execucao.
+mysql.host=localhost
+mysql.port=3306
+mysql.database=bd_trabnp2
+mysql.user=root
+mysql.password=
+
+# ----- SQLite (alternativa sem servidor) -----
+# Para usar, troque db.type=sqlite la em cima.
+sqlite.file=banco.db
